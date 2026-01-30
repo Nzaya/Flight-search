@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sliders, DollarSign, Clock, Filter } from 'lucide-react';
+import {DollarSign, Clock, Filter } from 'lucide-react';
 import { FilterOptions } from '../../types';
 
 interface FlightFiltersProps {

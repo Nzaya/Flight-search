@@ -143,82 +143,88 @@ export const SearchForm: React.FC<SearchFormProps> = ({ onSubmit, loading, onOri
    * Search for airports using API with fallback
    */
   const searchAirports = useCallback(
-    debounce(async (query: string, type: 'origin' | 'destination') => {
-      console.group(`🔍 Airport Search (${type})`);
-      console.log(`📋 Search query: "${query}"`);
-      
-      if (query.length < 2) {
-        console.log('⚠️ Query too short, clearing suggestions');
-        if (type === 'origin') {
-          setOriginSuggestions([]);
-          setUsingAPISuggestions(prev => ({...prev, origin: false}));
-        } else {
-          setDestinationSuggestions([]);
-          setUsingAPISuggestions(prev => ({...prev, destination: false}));
-        }
-        console.groupEnd();
-        return;
-      }
+  debounce(async (query: string, type: 'origin' | 'destination') => {
+    console.group(`🔍 Airport Search (${type})`);
+    console.log(`📋 Search query: "${query}"`);
 
-      // Set loading state
+    if (query.length < 2) {
+      console.log('⚠️ Query too short, clearing suggestions');
       if (type === 'origin') {
-        setIsLoadingSuggestions(prev => ({...prev, origin: true}));
+        setOriginSuggestions([]);
+        setUsingAPISuggestions(prev => ({ ...prev, origin: false }));
       } else {
-        setIsLoadingSuggestions(prev => ({...prev, destination: true}));
+        setDestinationSuggestions([]);
+        setUsingAPISuggestions(prev => ({ ...prev, destination: false }));
+      }
+      console.groupEnd();
+      return;
+    }
+
+    // Set loading state
+    if (type === 'origin') {
+      setIsLoadingSuggestions(prev => ({ ...prev, origin: true }));
+    } else {
+      setIsLoadingSuggestions(prev => ({ ...prev, destination: true }));
+    }
+
+    try {
+      console.log('🌐 Attempting to fetch airport suggestions from API...');
+      const suggestions = await FlightAPI.getAirportSuggestions(query);
+
+      if (type === 'origin') {
+        setUsingAPISuggestions(prev => ({ ...prev, origin: true }));
+        setOriginSuggestions(suggestions);
+        console.log(`✅ Received ${suggestions.length} API suggestions for origin`);
+      } else {
+        setUsingAPISuggestions(prev => ({ ...prev, destination: true }));
+        setDestinationSuggestions(suggestions);
+        console.log(`✅ Received ${suggestions.length} API suggestions for destination`);
       }
 
-      try {
-        console.log('🌐 Attempting to fetch airport suggestions from API...');
-        const suggestions = await FlightAPI.getAirportSuggestions(query);
-        
-        if (type === 'origin') {
-          setUsingAPISuggestions(prev => ({...prev, origin: true}));
-          setOriginSuggestions(suggestions);
-          console.log(`✅ Received ${suggestions.length} API suggestions for origin`);
-        } else {
-          setUsingAPISuggestions(prev => ({...prev, destination: true}));
-          setDestinationSuggestions(suggestions);
-          console.log(`✅ Received ${suggestions.length} API suggestions for destination`);
-        }
-
-        // Log API/mode status
-        if (suggestions.length > 0) {
-          console.log('📡 Using data from: API');
-        } else {
-          console.log('🎭 Using data from: Mock (no API results)');
-        }
-
-      } catch (error) {
-        console.warn(`⚠️ API search failed for "${query}", using fallback data`);
-        
-        // Fallback to local filtering if API fails
-        const fallbackResults = FALLBACK_AIRPORTS.filter(airport =>
-          airport.code.toLowerCase().includes(query.toLowerCase()) ||
-          airport.city.toLowerCase().includes(query.toLowerCase()) ||
-          airport.name.toLowerCase().includes(query.toLowerCase())
-        ).slice(0, 5);
-
-        if (type === 'origin') {
-          setUsingAPISuggestions(prev => ({...prev, origin: false}));
-          setOriginSuggestions(fallbackResults);
-          console.log(`🔄 Using ${fallbackResults.length} fallback suggestions for origin`);
-        } else {
-          setUsingAPISuggestions(prev => ({...prev, destination: false}));
-          setDestinationSuggestions(fallbackResults);
-          console.log(`🔄 Using ${fallbackResults.length} fallback suggestions for destination`);
-        }
-      } finally {
-        // Clear loading state
-        if (type === 'origin') {
-          setIsLoadingSuggestions(prev => ({...prev, origin: false}));
-        } else {
-          setIsLoadingSuggestions(prev => ({...prev, destination: false}));
-        }
-        console.groupEnd();
+      // Log API/mode status
+      if (suggestions.length > 0) {
+        console.log('📡 Using data from: API');
+      } else {
+        console.log('🎭 Using data from: Mock (no API results)');
       }
-    }, 300),
-    []
-  );
+
+    } catch (error) {
+      console.warn(`⚠️ API search failed for "${query}", using fallback data`);
+
+      // Fallback to local filtering if API fails
+      const fallbackResults = FALLBACK_AIRPORTS.filter(airport =>
+        airport.code.toLowerCase().includes(query.toLowerCase()) ||
+        airport.city.toLowerCase().includes(query.toLowerCase()) ||
+        airport.name.toLowerCase().includes(query.toLowerCase())
+      ).slice(0, 5);
+
+      if (type === 'origin') {
+        setUsingAPISuggestions(prev => ({ ...prev, origin: false }));
+        setOriginSuggestions(fallbackResults);
+        console.log(`🔄 Using ${fallbackResults.length} fallback suggestions for origin`);
+      } else {
+        setUsingAPISuggestions(prev => ({ ...prev, destination: false }));
+        setDestinationSuggestions(fallbackResults);
+        console.log(`🔄 Using ${fallbackResults.length} fallback suggestions for destination`);
+      }
+    } finally {
+      // Clear loading state
+      if (type === 'origin') {
+        setIsLoadingSuggestions(prev => ({ ...prev, origin: false }));
+      } else {
+        setIsLoadingSuggestions(prev => ({ ...prev, destination: false }));
+      }
+      console.groupEnd();
+    }
+  }, 300),
+  [
+    setOriginSuggestions,
+    setDestinationSuggestions,
+    setIsLoadingSuggestions,
+    setUsingAPISuggestions
+  ]
+);
+
 
   /**
    * Handle search input changes
