@@ -38,7 +38,7 @@ REACT_APP_AMADEUS_API_KEY=your_api_key_here
 REACT_APP_AMADEUS_API_SECRET=your_api_secret_here
 
 Development Mode
-REACT_APP_USE_MOCK_DATA=false  # Set to true for offline development
+REACT_APP_USE_MOCK_DATA=false  # Set to false to try real API first, fallback to mock
 ```
 
 ## Screenshots
@@ -47,4 +47,23 @@ REACT_APP_USE_MOCK_DATA=false  # Set to true for offline development
 
 ### Search, PriceTrend & Filters 
 ![Search, PriceTrend & Filters](https://github.com/Nzaya/Flight-search/blob/main/src/public/images/q.png?raw=true)
+
+## Run Locally
+Clone the project
+```bash
+  git clone the project
+```
+Go to the project directory
+```bash
+  cd my-project
+```
+Install dependencies
+```bash
+  npm install
+```
+Start the server
+```bash
+  npm start
+```
+
 
