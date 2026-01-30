@@ -10,7 +10,6 @@ const AMADEUS_CONFIG = {
 } as const;
 
 // ==================== CACHING SYSTEM ====================
-// Critical for staying within 39 calls/month quota
 interface APICache<T> {
   data: T;
   timestamp: number;

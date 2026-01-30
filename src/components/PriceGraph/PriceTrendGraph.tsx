@@ -9,7 +9,6 @@ import {
   ResponsiveContainer 
 } from 'recharts';
 
-// Update interface to match our new API response
 interface PriceDataPoint {
   date: string;
   price: number;
