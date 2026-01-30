@@ -1,46 +1,50 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# SkySearch Flight App
 
-## Available Scripts
+SkySearch is a modern, production-ready flight search application built with React and TypeScript. It integrates with the Amadeus Flight APIs while implementing smart caching, rate limiting, and graceful degradation patterns. The application helps users discover flight destinations and find the best deals while efficiently managing API usage within free tier limits.
 
-In the project directory, you can run:
 
-### `npm start`
+## Key Features
+- **Destination Discovery:** Explore places you can fly from any airport with real pricing.
+- **Smart Flight Search:** Find flights with detailed information and filtering options
+- **Price Trend Analysis:** Visualize price fluctuations over time with interactive charts
+- **Graceful Fallbacks:** Seamlessly switches to mock data during API failures
+- **Responsive Design:** Beautiful UI that works on all devices
+- **Real-time Filtering:** Instant filtering by price, airlines, stops, and departure times
+- **Airport Auto-suggestions:** Intelligent airport search with offline fallback.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Architecture & Technology Stack
+### Fronted
+- React 18 with TypeScript for type-safe development
+- Tailwind CSS for utility-first styling
+- Recharts for data visualization
+- Axios for HTTP requests
+- Lucide React for icons
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### API Integration
+- Amadeus Flight APIs - `Flight Inspiration Search`, `Flight Cheapest Date Search`, `Airport & Location Search`
 
-### `npm test`
+### State Management
+- Custom React hooks for centralized state.
+- LocalStorage for persistent caching.
+- React Context for theme/future global state.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+## Environment Configuration
+Create a new file named `.env.local` in the root of your project and add the following content:
+```env
+Amadeus API Credentials (Get from https://developers.amadeus.com)
+REACT_APP_AMADEUS_API_KEY=your_api_key_here
+REACT_APP_AMADEUS_API_SECRET=your_api_secret_here
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Development Mode
+REACT_APP_USE_MOCK_DATA=false  # Set to true for offline development
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Screenshots
+### Search and Discover 
+![Search & Discover Destination](https://github.com/Nzaya/Flight-search/blob/main/src/public/images/r.png?raw=true)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Search, PriceTrend & Filters 
+![Search, PriceTrend & Filters](https://github.com/Nzaya/Flight-search/blob/main/src/public/images/q.png?raw=true)
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
